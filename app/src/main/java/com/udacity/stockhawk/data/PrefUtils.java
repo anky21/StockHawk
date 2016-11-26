@@ -3,6 +3,7 @@ package com.udacity.stockhawk.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.udacity.stockhawk.R;
 
@@ -42,7 +43,12 @@ public final class PrefUtils {
         Set<String> stocks = getStocks(context);
 
         if (add) {
-            stocks.add(symbol);
+            if (stocks.contains(symbol.toUpperCase())) {
+                Toast.makeText(context, "You have already added this stock.", Toast.LENGTH_SHORT).show();
+                return;
+            } else {
+                stocks.add(symbol);
+            }
         } else {
             stocks.remove(symbol);
         }

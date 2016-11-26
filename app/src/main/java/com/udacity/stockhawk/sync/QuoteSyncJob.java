@@ -159,10 +159,6 @@ public final class QuoteSyncJob {
             JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
             scheduler.schedule(builder.build());
-
-
         }
     }
-
-
 }
