@@ -9,8 +9,10 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.utilities;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public final class QuoteSyncJob {
     private static final int INITIAL_BACKOFF = 10000;
     private static final int PERIODIC_ID = 1;
 
-    static void getQuotes(Context context) {
+    static void getQuotes(final Context context) {
 
         Timber.d("Running sync job");
 
@@ -69,36 +71,45 @@ public final class QuoteSyncJob {
 
 
                 Stock stock = quotes.get(symbol);
+                if (null == stock){
+                    stockPref.remove(symbol);
+                    utilities.showToast(context, symbol.toUpperCase(), R.string.nonexistent_or_suspended_stock_msg);
+                }else {
                 StockQuote quote = stock.getQuote();
 
-                float price = quote.getPrice().floatValue();
-                float change = quote.getChange().floatValue();
-                float percentChange = quote.getChangeInPercent().floatValue();
+                   if (null == quote.getPrice() && null == quote.getPreviousClose()) {
+                       stockPref.remove(symbol);
+                       utilities.showToast(context, symbol.toUpperCase(), R.string.nonexistent_or_suspended_stock_msg);
+                   } else {
+                       float price = quote.getPrice().floatValue();
+                       float change = quote.getChange().floatValue();
+                       float percentChange = quote.getChangeInPercent().floatValue();
 
-                // WARNING! Don't request historical data for a stock that doesn't exist!
-                // The request will hang forever X_x
-                List<HistoricalQuote> history = stock.getHistory(from, to, Interval.WEEKLY);
+                       // WARNING! Don't request historical data for a stock that doesn't exist!
+                       // The request will hang forever X_x
+                       List<HistoricalQuote> history = stock.getHistory(from, to, Interval.WEEKLY);
 
-                StringBuilder historyBuilder = new StringBuilder();
+                       StringBuilder historyBuilder = new StringBuilder();
 
-                for (HistoricalQuote it : history) {
-                    historyBuilder.append(it.getDate().getTimeInMillis());
-                    historyBuilder.append(", ");
-                    historyBuilder.append(it.getClose());
-                    historyBuilder.append("\n");
-                }
+                       for (HistoricalQuote it : history) {
+                           historyBuilder.append(it.getDate().getTimeInMillis());
+                           historyBuilder.append(", ");
+                           historyBuilder.append(it.getClose());
+                           historyBuilder.append("\n");
+                       }
 
-                ContentValues quoteCV = new ContentValues();
-                quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
-                quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
-                quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
-                quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
+                       ContentValues quoteCV = new ContentValues();
+                       quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
+                       quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
+                       quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
+                       quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
 
 
-                quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
+                       quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
 
-                quoteCVs.add(quoteCV);
-
+                       quoteCVs.add(quoteCV);
+                   }
+               }
             }
 
             context.getContentResolver()

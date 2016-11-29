@@ -35,5 +35,7 @@
 
     <string name="toast_stock_added_no_connectivity">Symbol %s added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>
+    <string name="non_existent_stock_message"> - this stock does not exist. Please check.</string>
+    <string name="nonexistent_or_suspended_stock_msg"> - this stock does not exist or is suspended.</string>
 
 </resources>
