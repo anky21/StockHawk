@@ -13,9 +13,11 @@ public class Contract {
     public static final String PATH_QUOTE = "quote";
     public static final String PATH_QUOTE_WITH_SYMBOL = "quote/*";
 
+    private Contract(){}
+
     public static final class Quote implements BaseColumns {
 
-        public static final Uri uri = BASE_URI.buildUpon().appendPath(PATH_QUOTE).build();
+        public static final Uri URI = BASE_URI.buildUpon().appendPath(PATH_QUOTE).build();
 
         public static final String TABLE_NAME = "quotes";
 
@@ -43,11 +45,11 @@ public class Contract {
         };
 
         public static Uri makeUriForStock(String symbol) {
-            return uri.buildUpon().appendPath(symbol).build();
+            return URI.buildUpon().appendPath(symbol).build();
         }
 
-        public static String getStockFromUri(Uri uri) {
-            return uri.getLastPathSegment();
+        public static String getStockFromUri(Uri queryUri) {
+            return queryUri.getLastPathSegment();
         }
 
 

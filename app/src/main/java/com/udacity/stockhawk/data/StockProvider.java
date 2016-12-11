@@ -96,7 +96,7 @@ public class StockProvider extends ContentProvider {
                         null,
                         values
                 );
-                returnUri = Contract.Quote.uri;
+                returnUri = Contract.Quote.URI;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown URI:" + uri);

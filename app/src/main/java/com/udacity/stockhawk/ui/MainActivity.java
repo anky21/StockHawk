@@ -1,6 +1,7 @@
 package com.udacity.stockhawk.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onClick(String symbol) {
         Timber.d("Symbol clicked: %s", symbol);
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(Intent.EXTRA_TEXT, symbol);
+        startActivity(intent);
     }
 
     @Override
@@ -91,15 +95,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
+    // If network is up and there are stocks in the watchlist, refresh the screen.
     @Override
     public void onRefresh() {
-
-        QuoteSyncJob.syncImmediately(this);
-
+        // Only refresh when network is up and there are stocks in the watchlist
         if (!networkUp() && adapter.getItemCount() == 0) {
             swipeRefreshLayout.setRefreshing(false);
             error.setText(getString(R.string.error_no_network));
             error.setVisibility(View.VISIBLE);
+            Toast.makeText(this, R.string.error_no_network, Toast.LENGTH_LONG).show();
         } else if (!networkUp()) {
             swipeRefreshLayout.setRefreshing(false);
             Toast.makeText(this, R.string.toast_no_connectivity, Toast.LENGTH_LONG).show();
@@ -108,8 +112,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             swipeRefreshLayout.setRefreshing(false);
             error.setText(getString(R.string.error_no_stocks));
             error.setVisibility(View.VISIBLE);
+            Toast.makeText(this, R.string.error_no_stocks, Toast.LENGTH_LONG).show();
         } else {
             error.setVisibility(View.GONE);
+            QuoteSyncJob.syncImmediately(this);
         }
     }
 
@@ -135,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this,
-                Contract.Quote.uri,
+                Contract.Quote.URI,
                 Contract.Quote.QUOTE_COLUMNS,
                 null, null, Contract.Quote.COLUMN_SYMBOL);
     }
