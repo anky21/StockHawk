@@ -1,10 +1,16 @@
 package com.udacity.stockhawk.ui;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,30 +24,46 @@ import com.udacity.stockhawk.R;
 
 import java.util.ArrayList;
 
+import static com.udacity.stockhawk.data.Contract.Quote;
+import static com.udacity.stockhawk.data.Contract.Quote.makeUriForStock;
+
 /**
  * Created by anky_ on 11/12/2016.
  */
 
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<Cursor> {
     private LineChart chart;
+    private Uri mUri;
+    private String symbol;
+    private final static int STOCK_LOADER = 23;
+
 
     public DetailFragment() {}  // Required empty public constructor
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootview = inflater.inflate(R.layout.fragment_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
         Intent intent = getActivity().getIntent();
         if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT)){
-            String symbol = intent.getStringExtra(Intent.EXTRA_TEXT);
+            symbol = intent.getStringExtra(Intent.EXTRA_TEXT);
         }
 
-        chart = (LineChart)rootview.findViewById(R.id.stock_linechart);
+        // Build the URI for this stock with its symbol
+        mUri = makeUriForStock(symbol);
+
+
+
+        chart = (LineChart)rootView.findViewById(R.id.stock_linechart);
         // Plot the graph
         plotStock();
 
-        return rootview;
+        // Initialise the cursor loader
+        getLoaderManager().initLoader(STOCK_LOADER, null, this);
+
+        return rootView;
     }
 
     // Method for plotting a graph
@@ -72,5 +94,33 @@ public class DetailFragment extends Fragment {
         chart.setData(new LineData(xaxes,lineDataSets));
 
         chart.setVisibleXRangeMaximum(1000f);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (null != mUri) {
+            return new CursorLoader(
+                    getActivity(),
+                    mUri,
+                    Quote.QUOTE_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.moveToFirst()){
+            final String lastDate = data.getString(Quote.POSITION_LAST_TRADE_DATE);
+            Log.v("TAG", "lastDate " + lastDate);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
