@@ -26,6 +26,14 @@ public class Contract {
         public static final String COLUMN_ABSOLUTE_CHANGE = "absolute_change";
         public static final String COLUMN_PERCENTAGE_CHANGE = "percentage_change";
         public static final String COLUMN_HISTORY = "history";
+        public static final String COLUMN_AVERAGE_VOLUME = "average_volume";
+        public static final String COLUMN_LAST_TRADE_DATE = "last_trade_date";
+        public static final String COLUMN_DAY_HIGH = "day_high";
+        public static final String COLUMN_DAY_LOW = "day_low";
+        public static final String COLUMN_VOLUME = "volume";
+        public static final String COLUMN_YEAR_HIGH = "year_high";
+        public static final String COLUMN_YEAR_LOW = "year_low";
+
 
 
         public static final int POSITION_ID = 0;
@@ -34,6 +42,14 @@ public class Contract {
         public static final int POSITION_ABSOLUTE_CHANGE = 3;
         public static final int POSITION_PERCENTAGE_CHANGE = 4;
         public static final int POSITION_HISTORY = 5;
+        public static final int POSITION_AVERAGE_VOLUME = 6;
+        public static final int POSITION_LAST_TRADE_DATE = 7;
+        public static final int POSITION_DAY_HIGH = 8;
+        public static final int POSITION_DAY_LOW = 9;
+        public static final int POSITION_VOLUME = 10;
+        public static final int POSITION_YEAR_HIGH = 11;
+        public static final int POSITION_YEAR_LOW = 12;
+
 
         public static final String[] QUOTE_COLUMNS = {
                 _ID,
@@ -41,7 +57,14 @@ public class Contract {
                 COLUMN_PRICE,
                 COLUMN_ABSOLUTE_CHANGE,
                 COLUMN_PERCENTAGE_CHANGE,
-                COLUMN_HISTORY
+                COLUMN_HISTORY,
+                COLUMN_AVERAGE_VOLUME,
+                COLUMN_LAST_TRADE_DATE,
+                COLUMN_DAY_HIGH,
+                COLUMN_DAY_LOW,
+                COLUMN_VOLUME,
+                COLUMN_YEAR_HIGH,
+                COLUMN_YEAR_LOW
         };
 
         public static Uri makeUriForStock(String symbol) {

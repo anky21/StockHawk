@@ -87,6 +87,13 @@ public final class QuoteSyncJob {
                        float price = quote.getPrice().floatValue();
                        float change = quote.getChange().floatValue();
                        float percentChange = quote.getChangeInPercent().floatValue();
+                       Long averageVolume = quote.getAvgVolume().longValue();
+                       String lastTradeDate = quote.getLastTradeDateStr();
+                       float dayHigh = quote.getDayHigh().floatValue();
+                       float dayLow = quote.getDayLow().floatValue();
+                       Long volume = quote.getVolume().longValue();
+                       float yearHigh = quote.getYearHigh().floatValue();
+                       float yearLow = quote.getYearLow().floatValue();
 
                        // WARNING! Don't request historical data for a stock that doesn't exist!
                        // The request will hang forever X_x
@@ -106,9 +113,14 @@ public final class QuoteSyncJob {
                        quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
                        quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
                        quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
-
-
                        quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
+                       quoteCV.put(Contract.Quote.COLUMN_AVERAGE_VOLUME, averageVolume);
+                       quoteCV.put(Contract.Quote.COLUMN_LAST_TRADE_DATE, lastTradeDate);
+                       quoteCV.put(Contract.Quote.COLUMN_DAY_HIGH, dayHigh);
+                       quoteCV.put(Contract.Quote.COLUMN_DAY_LOW, dayLow);
+                       quoteCV.put(Contract.Quote.COLUMN_VOLUME, volume);
+                       quoteCV.put(Contract.Quote.COLUMN_YEAR_HIGH, yearHigh);
+                       quoteCV.put(Contract.Quote.COLUMN_YEAR_LOW, yearLow);
 
                        quoteCVs.add(quoteCV);
                    }
