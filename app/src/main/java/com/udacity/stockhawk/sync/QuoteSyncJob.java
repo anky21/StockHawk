@@ -50,7 +50,6 @@ public final class QuoteSyncJob {
         from.add(Calendar.YEAR, -YEARS_OF_HISTORY);
 
         try {
-
             Set<String> stockPref = PrefUtils.getStocks(context);
             Set<String> stockCopy = new HashSet<>();
             stockCopy.addAll(stockPref);
@@ -89,11 +88,25 @@ public final class QuoteSyncJob {
                        float percentChange = quote.getChangeInPercent().floatValue();
                        Long averageVolume = quote.getAvgVolume().longValue();
                        String lastTradeDate = quote.getLastTradeDateStr();
-                       float dayHigh = quote.getDayHigh().floatValue();
-                       float dayLow = quote.getDayLow().floatValue();
+
+                       String dayHigh;
+                       if(utilities.isParseable(quote.getDayHigh().toString())){
+                           dayHigh = quote.getDayHigh().toString();
+                       } else {
+                           dayHigh = " ";
+                       }
+
+                       String dayLow;
+                       if(utilities.isParseable(quote.getDayLow().toString())){
+                           dayLow = quote.getDayLow().toString();
+                       } else {
+                           dayLow = " ";
+                       }
+
                        Long volume = quote.getVolume().longValue();
                        float yearHigh = quote.getYearHigh().floatValue();
                        float yearLow = quote.getYearLow().floatValue();
+                       String name = stock.getName();
 
                        // WARNING! Don't request historical data for a stock that doesn't exist!
                        // The request will hang forever X_x
@@ -121,6 +134,7 @@ public final class QuoteSyncJob {
                        quoteCV.put(Contract.Quote.COLUMN_VOLUME, volume);
                        quoteCV.put(Contract.Quote.COLUMN_YEAR_HIGH, yearHigh);
                        quoteCV.put(Contract.Quote.COLUMN_YEAR_LOW, yearLow);
+                       quoteCV.put(Contract.Quote.COLUMN_COMPANY_NAME, name);
 
                        quoteCVs.add(quoteCV);
                    }
@@ -143,7 +157,6 @@ public final class QuoteSyncJob {
     private static void schedulePeriodic(Context context) {
         Timber.d("Scheduling a periodic task");
 
-
         JobInfo.Builder builder = new JobInfo.Builder(PERIODIC_ID, new ComponentName(context, QuoteJobService.class));
 
 
@@ -151,18 +164,14 @@ public final class QuoteSyncJob {
                 .setPeriodic(PERIOD)
                 .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL);
 
-
         JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
         scheduler.schedule(builder.build());
     }
 
-
     synchronized public static void initialize(final Context context) {
-
         schedulePeriodic(context);
         syncImmediately(context);
-
     }
 
     synchronized public static void syncImmediately(Context context) {

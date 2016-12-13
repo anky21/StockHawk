@@ -24,4 +24,10 @@ public class utilities {
             }
         });
     }
+
+    // Check whether the data from QuoteStock is Parseable
+    public static boolean isParseable(String data) {
+        return !(data == null || data.equals("N/A") || data.equals("-")
+                || data.equals("") || data.equals("nan"));
+    }
 }

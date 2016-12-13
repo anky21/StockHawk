@@ -38,7 +38,6 @@ public class DetailFragment extends Fragment
     private String symbol;
     private final static int STOCK_LOADER = 23;
 
-
     public DetailFragment() {}  // Required empty public constructor
 
     @Nullable
@@ -53,8 +52,6 @@ public class DetailFragment extends Fragment
 
         // Build the URI for this stock with its symbol
         mUri = makeUriForStock(symbol);
-
-
 
         chart = (LineChart)rootView.findViewById(R.id.stock_linechart);
         // Plot the graph

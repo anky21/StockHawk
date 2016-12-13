@@ -33,8 +33,7 @@ public class Contract {
         public static final String COLUMN_VOLUME = "volume";
         public static final String COLUMN_YEAR_HIGH = "year_high";
         public static final String COLUMN_YEAR_LOW = "year_low";
-
-
+        public static final String COLUMN_COMPANY_NAME = "name";
 
         public static final int POSITION_ID = 0;
         public static final int POSITION_SYMBOL = 1;
@@ -49,7 +48,7 @@ public class Contract {
         public static final int POSITION_VOLUME = 10;
         public static final int POSITION_YEAR_HIGH = 11;
         public static final int POSITION_YEAR_LOW = 12;
-
+        public static final int POSITION_NAME = 13;
 
         public static final String[] QUOTE_COLUMNS = {
                 _ID,
@@ -64,7 +63,8 @@ public class Contract {
                 COLUMN_DAY_LOW,
                 COLUMN_VOLUME,
                 COLUMN_YEAR_HIGH,
-                COLUMN_YEAR_LOW
+                COLUMN_YEAR_LOW,
+                COLUMN_COMPANY_NAME
         };
 
         public static Uri makeUriForStock(String symbol) {

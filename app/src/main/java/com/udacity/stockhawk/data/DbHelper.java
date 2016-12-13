@@ -6,13 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.udacity.stockhawk.data.Contract.Quote;
 
-
 public class DbHelper extends SQLiteOpenHelper {
-
 
     static final String NAME = "StockHawk.db";
     private static final int VERSION = 1;
-
 
     public DbHelper(Context context) {
         super(context, NAME, null, VERSION);
@@ -29,15 +26,15 @@ public class DbHelper extends SQLiteOpenHelper {
                 Quote.COLUMN_HISTORY + " TEXT NOT NULL, " +
                 Quote.COLUMN_AVERAGE_VOLUME + " INTEGER NOT NULL, " +
                 Quote.COLUMN_LAST_TRADE_DATE + " TEXT NOT NULL, " +
-                Quote.COLUMN_DAY_HIGH + " REAL NOT NULL, " +
-                Quote.COLUMN_DAY_LOW + " REAL NOT NULL, " +
+                Quote.COLUMN_DAY_HIGH + " TEXT NOT NULL, " +
+                Quote.COLUMN_DAY_LOW + " TEXT NOT NULL, " +
                 Quote.COLUMN_VOLUME + " INTEGER NOT NULL, " +
                 Quote.COLUMN_YEAR_HIGH + " REAL NOT NULL, " +
                 Quote.COLUMN_YEAR_LOW + " REAL NOT NULL, " +
+                Quote.COLUMN_COMPANY_NAME + " TEXT NOT NULL, " +
                 "UNIQUE (" + Quote.COLUMN_SYMBOL + ") ON CONFLICT REPLACE);";
 
         db.execSQL(builder);
-
     }
 
     @Override
