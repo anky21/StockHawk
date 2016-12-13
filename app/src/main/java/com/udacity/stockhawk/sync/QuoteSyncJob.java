@@ -90,14 +90,14 @@ public final class QuoteSyncJob {
                        String lastTradeDate = quote.getLastTradeDateStr();
 
                        String dayHigh;
-                       if(utilities.isParseable(quote.getDayHigh().toString())){
+                       if(null != quote.getDayHigh()){
                            dayHigh = quote.getDayHigh().toString();
                        } else {
                            dayHigh = " ";
                        }
 
                        String dayLow;
-                       if(utilities.isParseable(quote.getDayLow().toString())){
+                       if(null != quote.getDayLow()){
                            dayLow = quote.getDayLow().toString();
                        } else {
                            dayLow = " ";

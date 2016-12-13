@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.udacity.stockhawk.R;
+import com.udacity.stockhawk.utilities;
 
 import java.util.ArrayList;
 
@@ -33,6 +33,7 @@ import static com.udacity.stockhawk.data.Contract.Quote.makeUriForStock;
 
 public class DetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
+    private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     private LineChart chart;
     private Uri mUri;
     private String symbol;
@@ -54,8 +55,6 @@ public class DetailFragment extends Fragment
         mUri = makeUriForStock(symbol);
 
         chart = (LineChart)rootView.findViewById(R.id.stock_linechart);
-        // Plot the graph
-        plotStock();
 
         // Initialise the cursor loader
         getLoaderManager().initLoader(STOCK_LOADER, null, this);
@@ -64,33 +63,30 @@ public class DetailFragment extends Fragment
     }
 
     // Method for plotting a graph
-    private void plotStock(){
-        ArrayList<String> xAXES = new ArrayList<>();
-        ArrayList<Entry> yAXEScos = new ArrayList<>();
-        double x = 0 ;
-        int numDataPoints = 1000;
+    private void plotStock(ArrayList<String> date, ArrayList<Float> price, String stock){
+        ArrayList<String> xAxis = date;
+        ArrayList<Entry> yAxis = new ArrayList<>();
+        int numDataPoints = date.size();
         for(int i=0;i<numDataPoints;i++){
-            float cosFunction = Float.parseFloat(String.valueOf(Math.cos(x)));
-            x = x + 0.1;
-            yAXEScos.add(new Entry(cosFunction,i));
-            xAXES.add(i, String.valueOf(x));
+            float singlePrice = price.get(i);
+            yAxis.add(new Entry(singlePrice,i));
         }
-        String[] xaxes = new String[xAXES.size()];
-        for(int i=0; i<xAXES.size();i++){
-            xaxes[i] = xAXES.get(i).toString();
+        String[] xaxes = new String[xAxis.size()];
+        for(int i=0; i<xAxis.size();i++){
+            xaxes[i] = xAxis.get(i).toString();
         }
 
         ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
 
-        LineDataSet lineDataSet1 = new LineDataSet(yAXEScos,"cos");
-        lineDataSet1.setDrawCircles(false);
-        lineDataSet1.setColor(Color.BLUE);
+        LineDataSet lineDataset = new LineDataSet(yAxis, stock);
+        lineDataset.setDrawCircles(false);
+        lineDataset.setColor(Color.BLUE);
 
-        lineDataSets.add(lineDataSet1);
+        lineDataSets.add(lineDataset);
 
         chart.setData(new LineData(xaxes,lineDataSets));
 
-        chart.setVisibleXRangeMaximum(1000f);
+//        chart.setVisibleXRangeMaximum(1000f);
     }
 
     @Override
@@ -112,7 +108,32 @@ public class DetailFragment extends Fragment
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()){
             final String lastDate = data.getString(Quote.POSITION_LAST_TRADE_DATE);
-            Log.v("TAG", "lastDate " + lastDate);
+
+            String historicalDataRaw = data.getString(Quote.POSITION_HISTORY);
+            ArrayList<String> historyDate = new ArrayList<>(); // Array data of historical dates
+            ArrayList<String> formattedHistoryDate = new ArrayList<>(); // Array data of historical dates in a non-chronological
+            ArrayList<Float> historyPrice = new ArrayList<>(); // Array data of historical prices
+            ArrayList<Float> formattedHistoryPrice = new ArrayList<>(); // Array data of historical prices in a non-chronological
+            if (null != historicalDataRaw){
+                String[] splitHistoricalData = historicalDataRaw.split("\\r?\\n"); // Split on new lines (.split("\\r\\n|\\n|\\r"))
+                    for (int i= 0; i<splitHistoricalData.length; i++){
+                        String[] a = splitHistoricalData[i].split(",");
+                        int commaIndex = splitHistoricalData[i].indexOf(","); // Index of the comma
+                        int endIndex = splitHistoricalData[i].length();
+                        String dateString = splitHistoricalData[i].substring(0,commaIndex);
+                        long dateLong = Long.parseLong(dateString);
+                        // Change the date in milliseconds to a format of DD MMM YYYY
+                        String formattedDate = utilities.formatDate(dateLong);
+
+                        String priceString = splitHistoricalData[i].substring(commaIndex + 2,endIndex);
+                        historyDate.add(formattedDate);
+                        formattedHistoryDate = utilities.formatStringArrayList(historyDate);
+                        historyPrice.add(Float.parseFloat(priceString));
+                        formattedHistoryPrice = utilities.formatFloatArrayList(historyPrice);
+                    }
+            }
+            // Plot the graph
+            plotStock(formattedHistoryDate, formattedHistoryPrice, symbol);
         }
     }
 

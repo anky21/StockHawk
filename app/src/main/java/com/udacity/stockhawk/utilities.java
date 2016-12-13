@@ -1,10 +1,12 @@
 package com.udacity.stockhawk;
 
 import android.content.Context;
+import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
-import android.os.Handler;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 /**
  * Created by anky_ on 30/11/2016.
@@ -25,9 +27,33 @@ public class utilities {
         });
     }
 
-    // Check whether the data from QuoteStock is Parseable
-    public static boolean isParseable(String data) {
-        return !(data == null || data.equals("N/A") || data.equals("-")
-                || data.equals("") || data.equals("nan"));
+    /**
+     * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
+     */
+    public static String formatDate(long dateObject) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd LLL yyyy");
+        return dateFormat.format(dateObject);
+    }
+
+    // Reverse the order of an ArrayList<String>
+    public static ArrayList<String> formatStringArrayList(ArrayList<String> arrayList){
+        ArrayList<String> newArrayList = new ArrayList<>();
+        int numDataPoints = arrayList.size();
+        for(int i=0; i<numDataPoints;i++){
+            String singleItem = arrayList.get(numDataPoints - i - 1);
+            newArrayList.add(new String(singleItem));
+        }
+        return newArrayList;
+    }
+
+    // Reverse the order of an ArrayList<String>
+    public static ArrayList<Float> formatFloatArrayList(ArrayList<Float> arrayList){
+        ArrayList<Float> newArrayList = new ArrayList<>();
+        int numDataPoints = arrayList.size();
+        for(int i=0; i<numDataPoints;i++){
+            float singleItem = arrayList.get(numDataPoints - i - 1);
+            newArrayList.add(new Float(singleItem));
+        }
+        return newArrayList;
     }
 }
