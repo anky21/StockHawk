@@ -63,7 +63,7 @@ public class DetailFragment extends Fragment
     }
 
     // Method for plotting a graph
-    private void plotStock(ArrayList<String> date, ArrayList<Float> price, String stock){
+    private void plotStock(ArrayList<String> date, ArrayList<Float> price, String stockSymbol){
         ArrayList<String> xAxis = date;
         ArrayList<Entry> yAxis = new ArrayList<>();
         int numDataPoints = date.size();
@@ -78,15 +78,39 @@ public class DetailFragment extends Fragment
 
         ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
 
-        LineDataSet lineDataset = new LineDataSet(yAxis, stock);
+        LineDataSet lineDataset = new LineDataSet(yAxis, stockSymbol);
         lineDataset.setDrawCircles(false);
         lineDataset.setColor(Color.BLUE);
 
         lineDataSets.add(lineDataset);
 
-        chart.setData(new LineData(xaxes,lineDataSets));
+        applyChartSettings(chart); // Apply settings to the chart
 
-//        chart.setVisibleXRangeMaximum(1000f);
+        chart.setData(new LineData(xaxes,lineDataSets));
+        chart.invalidate();
+    }
+
+    // Apply settings to the chart
+    private void applyChartSettings(LineChart lineChart){
+        int textColor = getResources().getColor(R.color.general_text_color);
+
+        // Left axis
+        lineChart.getAxisLeft().setTextColor(textColor);
+
+        // Right axis
+        lineChart.getAxisRight().setTextColor(textColor);
+
+        // X axis
+        lineChart.getXAxis().setTextColor(textColor);
+
+        // Hide Legend
+        lineChart.getLegend().setEnabled(false);
+
+        // Remove Description label
+        lineChart.setDescription("");
+
+        // Allow scaling in both X and Y directions simultaneously
+        lineChart.setPinchZoom(true);
     }
 
     @Override
@@ -111,9 +135,9 @@ public class DetailFragment extends Fragment
 
             String historicalDataRaw = data.getString(Quote.POSITION_HISTORY);
             ArrayList<String> historyDate = new ArrayList<>(); // Array data of historical dates
-            ArrayList<String> formattedHistoryDate = new ArrayList<>(); // Array data of historical dates in a non-chronological
+            ArrayList<String> formattedHistoryDate = new ArrayList<>(); // Array data of historical dates in a chronological order
             ArrayList<Float> historyPrice = new ArrayList<>(); // Array data of historical prices
-            ArrayList<Float> formattedHistoryPrice = new ArrayList<>(); // Array data of historical prices in a non-chronological
+            ArrayList<Float> formattedHistoryPrice = new ArrayList<>(); // Array data of historical prices in a chronological order
             if (null != historicalDataRaw){
                 String[] splitHistoricalData = historicalDataRaw.split("\\r?\\n"); // Split on new lines (.split("\\r\\n|\\n|\\r"))
                     for (int i= 0; i<splitHistoricalData.length; i++){
