@@ -1,21 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    tools:context="com.udacity.stockhawk.ui.DetailFragment">
+
+    <TextView
+        android:id="@+id/company_name_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:textSize="20sp"
+        tools:text="FaceBook" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="16dp">
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello" />
+            android:layout_marginRight="10sp"
+            android:gravity="left|center_vertical"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            tools:text="$98.70" />
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/stock_linechart"
-            android:layout_width="match_parent"
-            android:layout_height="300dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/dollar_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+                tools:text="+$0.21" />
+
+            <TextView
+                android:id="@+id/percentage_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/percent_change_pill_green"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="#FFF"
+                android:textSize="12sp"
+                tools:text="+10%" />
+        </LinearLayout>
+
     </LinearLayout>
 
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/stock_linechart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <include layout="@layout/detail_grid_layout"/>
 </LinearLayout>

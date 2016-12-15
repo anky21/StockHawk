@@ -1,0 +1,67 @@
+<!-- GridLayout for DetailFragment-->
+<android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_gridlayout_pane"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/abc_list_item_padding_horizontal_material"
+    app:columnCount="2">
+
+    <TextView
+        android:id="@+id/day_range_label_tv"
+        style="@style/DetailGridLayoutTextStyle"
+        android:text="Day Range"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill"
+        app:layout_rowWeight="1"/>
+
+    <TextView
+        android:id="@+id/day_range_tv"
+        style="@style/DetailGridLayoutTextStyle"
+        app:layout_gravity="fill"
+        app:layout_columnWeight="1"
+        tools:text="1.93 - 2.12" />
+
+    <TextView
+        android:id="@+id/year_range_label_tv"
+        style="@style/DetailGridLayoutTextStyle"
+        android:text="52-Week Range"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill"
+        app:layout_rowWeight="1"/>
+
+    <TextView
+        android:id="@+id/year_range_tv"
+        style="@style/DetailGridLayoutTextStyle"
+        app:layout_gravity="fill"
+        tools:text="1.32 - 2.86" />
+
+    <TextView
+        android:id="@+id/avg_price_label_TV"
+        android:text="50-Day Avg. Price"
+        style="@style/DetailGridLayoutTextStyle"
+        app:layout_gravity="fill"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1"/>
+
+    <TextView
+        android:id="@+id/avg_price_tv"
+        style="@style/DetailGridLayoutTextStyle"
+        app:layout_gravity="fill"
+        tools:text="10.3m" />
+
+    <TextView
+        android:id="@+id/avg_volume_label_tv"
+        android:text="Avg. Volume"
+        style="@style/DetailGridLayoutTextStyle"
+        app:layout_gravity="fill"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1"/>
+
+    <TextView
+        android:id="@+id/avg_volume_tv"
+        style="@style/DetailGridLayoutTextStyle"
+        app:layout_gravity="fill"
+        tools:text="5.3m" />
+</android.support.v7.widget.GridLayout>

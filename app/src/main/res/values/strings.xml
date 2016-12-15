@@ -38,4 +38,7 @@
     <string name="non_existent_stock_message"> - this stock does not exist. Please check.</string>
     <string name="nonexistent_or_suspended_stock_msg"> - this stock does not exist or is suspended.</string>
 
+    <!-- DetailActivity Strings -->
+    <string name="price_range">%1$s - %2$s</string>
+
 </resources>

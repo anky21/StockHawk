@@ -27,10 +27,9 @@ public class Contract {
         public static final String COLUMN_PERCENTAGE_CHANGE = "percentage_change";
         public static final String COLUMN_HISTORY = "history";
         public static final String COLUMN_AVERAGE_VOLUME = "average_volume";
-        public static final String COLUMN_LAST_TRADE_DATE = "last_trade_date";
         public static final String COLUMN_DAY_HIGH = "day_high";
         public static final String COLUMN_DAY_LOW = "day_low";
-        public static final String COLUMN_VOLUME = "volume";
+        public static final String COLUMN_AVERAGE_PRICE = "avg_price";
         public static final String COLUMN_YEAR_HIGH = "year_high";
         public static final String COLUMN_YEAR_LOW = "year_low";
         public static final String COLUMN_COMPANY_NAME = "name";
@@ -42,13 +41,12 @@ public class Contract {
         public static final int POSITION_PERCENTAGE_CHANGE = 4;
         public static final int POSITION_HISTORY = 5;
         public static final int POSITION_AVERAGE_VOLUME = 6;
-        public static final int POSITION_LAST_TRADE_DATE = 7;
-        public static final int POSITION_DAY_HIGH = 8;
-        public static final int POSITION_DAY_LOW = 9;
-        public static final int POSITION_VOLUME = 10;
-        public static final int POSITION_YEAR_HIGH = 11;
-        public static final int POSITION_YEAR_LOW = 12;
-        public static final int POSITION_NAME = 13;
+        public static final int POSITION_DAY_HIGH = 7;
+        public static final int POSITION_DAY_LOW = 8;
+        public static final int POSITION_AVERAGE_PRICE = 9;
+        public static final int POSITION_YEAR_HIGH = 10;
+        public static final int POSITION_YEAR_LOW = 11;
+        public static final int POSITION_NAME = 12;
 
         public static final String[] QUOTE_COLUMNS = {
                 _ID,
@@ -58,10 +56,9 @@ public class Contract {
                 COLUMN_PERCENTAGE_CHANGE,
                 COLUMN_HISTORY,
                 COLUMN_AVERAGE_VOLUME,
-                COLUMN_LAST_TRADE_DATE,
                 COLUMN_DAY_HIGH,
                 COLUMN_DAY_LOW,
-                COLUMN_VOLUME,
+                COLUMN_AVERAGE_PRICE,
                 COLUMN_YEAR_HIGH,
                 COLUMN_YEAR_LOW,
                 COLUMN_COMPANY_NAME
