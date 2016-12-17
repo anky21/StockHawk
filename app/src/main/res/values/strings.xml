@@ -41,4 +41,7 @@
     <!-- DetailActivity Strings -->
     <string name="price_range">%1$s - %2$s</string>
 
+    <!-- Strings related to Widgets -->
+    <string name="title_widget_static">Stock Hawk</string>
+
 </resources>

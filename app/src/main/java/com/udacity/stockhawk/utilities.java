@@ -5,8 +5,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by anky_ on 30/11/2016.
@@ -55,5 +57,13 @@ public class utilities {
             newArrayList.add(new Float(singleItem));
         }
         return newArrayList;
+    }
+
+    // Set fraction digits and return a String
+    public static String formatNumbers(float floatNumber, int digitNumber){
+        NumberFormat formatter = NumberFormat.getNumberInstance(Locale.US);
+        formatter.setMaximumFractionDigits(digitNumber);
+        formatter.setMaximumFractionDigits(digitNumber);
+        return formatter.format(floatNumber);
     }
 }

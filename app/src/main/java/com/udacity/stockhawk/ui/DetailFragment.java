@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,6 @@ public class DetailFragment extends Fragment
     private DecimalFormat dollarFormatWithPlus;
     private DecimalFormat dollarFormat;
     private DecimalFormat percentageFormat;
-    private NumberFormat formatter;
 
     private String volumeString;
 
@@ -105,11 +105,6 @@ public class DetailFragment extends Fragment
         percentageFormat.setMaximumFractionDigits(2);
         percentageFormat.setMinimumFractionDigits(2);
         percentageFormat.setPositivePrefix("+");
-
-        // Set fraction digits of float numbers
-        formatter = NumberFormat.getNumberInstance(Locale.US);
-        formatter.setMinimumFractionDigits(2);
-        formatter.setMaximumFractionDigits(2);
 
         return rootView;
     }
@@ -203,14 +198,14 @@ public class DetailFragment extends Fragment
             float dayLow = data.getFloat(Quote.POSITION_DAY_LOW);
 
             String dayRange = String.format(getResources().getString(R.string.price_range),
-                    formatter.format(dayLow), formatter.format(dayHigh));
+                    utilities.formatNumbers(dayLow, 2), utilities.formatNumbers(dayHigh, 2));
             mDayRange.setText(dayRange);
 
             // Yearly price range
             float yearHigh = data.getFloat(Quote.POSITION_YEAR_HIGH);
             float yearLow = data.getFloat(Quote.POSITION_YEAR_LOW);
             String yearRange = String.format(getResources().getString(R.string.price_range),
-                    formatter.format(yearLow), formatter.format(yearHigh));
+                    utilities.formatNumbers(yearLow, 2), utilities.formatNumbers(yearHigh, 2));
             mYearRange.setText(yearRange);
 
             // Average Volume
@@ -218,10 +213,10 @@ public class DetailFragment extends Fragment
             float formattedVolume;
             if(volume > 1000000){ // When volume is bigger than 1 million
                 formattedVolume = volume/1000000;
-                volumeString = formatter.format(formattedVolume) + "m";
+                volumeString = utilities.formatNumbers(formattedVolume, 2) + "m";
             } else if(volume > 1000) { // When volume is bigger than 1 thousand
                 formattedVolume = volume/1000;
-                volumeString = formatter.format(formattedVolume) + "k";
+                volumeString = utilities.formatNumbers(formattedVolume, 2) + "k";
             } else { // When volume is lower than 1 thousand
                 formattedVolume = Math.round(volume);
                 volumeString = String.valueOf(formattedVolume);
@@ -235,8 +230,8 @@ public class DetailFragment extends Fragment
             ArrayList<Float> formattedHistoryPrice = new ArrayList<>(); // Array data of historical prices in a chronological order
             if (null != historicalDataRaw) {
                 String[] splitHistoricalData = historicalDataRaw.split("\\r?\\n"); // Split on new lines (.split("\\r\\n|\\n|\\r"))
+                Log.v(LOG_TAG,"abc" + splitHistoricalData[1]);
                 for (int i = 0; i < splitHistoricalData.length; i++) {
-                    String[] a = splitHistoricalData[i].split(",");
                     int commaIndex = splitHistoricalData[i].indexOf(","); // Index of the comma
                     int endIndex = splitHistoricalData[i].length();
                     String dateString = splitHistoricalData[i].substring(0, commaIndex);

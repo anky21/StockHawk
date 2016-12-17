@@ -12,4 +12,6 @@
 
     <color name="general_text_color">#C1C1C1</color>
 
+    <color name="widget_background_color">#303030</color>
+
 </resources>
