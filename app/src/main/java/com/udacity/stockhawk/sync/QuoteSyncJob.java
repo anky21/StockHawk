@@ -33,13 +33,14 @@ import yahoofinance.quotes.stock.StockQuote;
 public final class QuoteSyncJob {
 
     private static final int ONE_OFF_ID = 2;
-    private static final String ACTION_DATA_UPDATED = "com.udacity.stockhawk.ACTION_DATA_UPDATED";
+    public static final String ACTION_DATA_UPDATED = "com.udacity.stockhawk.ACTION_DATA_UPDATED";
     private static final int PERIOD = 300000;
     private static final int INITIAL_BACKOFF = 10000;
     private static final int PERIODIC_ID = 1;
     private static final int YEARS_OF_HISTORY = 2;
 
-    private QuoteSyncJob(){}
+    private QuoteSyncJob() {
+    }
 
     static void getQuotes(final Context context) {
 
@@ -73,70 +74,70 @@ public final class QuoteSyncJob {
 
 
                 Stock stock = quotes.get(symbol);
-                if (null == stock){
+                if (null == stock) {
                     stockPref.remove(symbol);
                     utilities.showToast(context, symbol.toUpperCase(), R.string.nonexistent_or_suspended_stock_msg);
-                }else {
-                StockQuote quote = stock.getQuote();
+                } else {
+                    StockQuote quote = stock.getQuote();
 
-                   if (null == quote.getPrice() && null == quote.getPreviousClose()) {
-                       stockPref.remove(symbol);
-                       utilities.showToast(context, symbol.toUpperCase(), R.string.nonexistent_or_suspended_stock_msg);
-                   } else {
-                       float price = quote.getPrice().floatValue();
-                       float change = quote.getChange().floatValue();
-                       float percentChange = quote.getChangeInPercent().floatValue();
-                       Long averageVolume = quote.getAvgVolume().longValue();
+                    if (null == quote.getPrice() && null == quote.getPreviousClose()) {
+                        stockPref.remove(symbol);
+                        utilities.showToast(context, symbol.toUpperCase(), R.string.nonexistent_or_suspended_stock_msg);
+                    } else {
+                        float price = quote.getPrice().floatValue();
+                        float change = quote.getChange().floatValue();
+                        float percentChange = quote.getChangeInPercent().floatValue();
+                        Long averageVolume = quote.getAvgVolume().longValue();
 
-                       String dayHigh;
-                       if(null != quote.getDayHigh()){
-                           dayHigh = quote.getDayHigh().toString();
-                       } else {
-                           dayHigh = " ";
-                       }
+                        String dayHigh;
+                        if (null != quote.getDayHigh()) {
+                            dayHigh = quote.getDayHigh().toString();
+                        } else {
+                            dayHigh = " ";
+                        }
 
-                       String dayLow;
-                       if(null != quote.getDayLow()){
-                           dayLow = quote.getDayLow().toString();
-                       } else {
-                           dayLow = " ";
-                       }
+                        String dayLow;
+                        if (null != quote.getDayLow()) {
+                            dayLow = quote.getDayLow().toString();
+                        } else {
+                            dayLow = " ";
+                        }
 
-                       float averagePrice = quote.getPriceAvg50().floatValue();
-                       float yearHigh = quote.getYearHigh().floatValue();
-                       float yearLow = quote.getYearLow().floatValue();
-                       String name = stock.getName();
+                        float averagePrice = quote.getPriceAvg50().floatValue();
+                        float yearHigh = quote.getYearHigh().floatValue();
+                        float yearLow = quote.getYearLow().floatValue();
+                        String name = stock.getName();
 
-                       // WARNING! Don't request historical data for a stock that doesn't exist!
-                       // The request will hang forever X_x
-                       List<HistoricalQuote> history = stock.getHistory(from, to, Interval.DAILY);
+                        // WARNING! Don't request historical data for a stock that doesn't exist!
+                        // The request will hang forever X_x
+                        List<HistoricalQuote> history = stock.getHistory(from, to, Interval.DAILY);
 
-                       StringBuilder historyBuilder = new StringBuilder();
+                        StringBuilder historyBuilder = new StringBuilder();
 
-                       for (HistoricalQuote it : history) {
-                           historyBuilder.append(it.getDate().getTimeInMillis());
-                           historyBuilder.append(", ");
-                           historyBuilder.append(it.getClose());
-                           historyBuilder.append("\n");
-                       }
+                        for (HistoricalQuote it : history) {
+                            historyBuilder.append(it.getDate().getTimeInMillis());
+                            historyBuilder.append(", ");
+                            historyBuilder.append(it.getClose());
+                            historyBuilder.append("\n");
+                        }
 
-                       ContentValues quoteCV = new ContentValues();
-                       quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
-                       quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
-                       quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
-                       quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
-                       quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
-                       quoteCV.put(Contract.Quote.COLUMN_AVERAGE_VOLUME, averageVolume);
-                       quoteCV.put(Contract.Quote.COLUMN_DAY_HIGH, dayHigh);
-                       quoteCV.put(Contract.Quote.COLUMN_DAY_LOW, dayLow);
-                       quoteCV.put(Contract.Quote.COLUMN_AVERAGE_PRICE, averagePrice);
-                       quoteCV.put(Contract.Quote.COLUMN_YEAR_HIGH, yearHigh);
-                       quoteCV.put(Contract.Quote.COLUMN_YEAR_LOW, yearLow);
-                       quoteCV.put(Contract.Quote.COLUMN_COMPANY_NAME, name);
+                        ContentValues quoteCV = new ContentValues();
+                        quoteCV.put(Contract.Quote.COLUMN_SYMBOL, symbol);
+                        quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
+                        quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
+                        quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
+                        quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
+                        quoteCV.put(Contract.Quote.COLUMN_AVERAGE_VOLUME, averageVolume);
+                        quoteCV.put(Contract.Quote.COLUMN_DAY_HIGH, dayHigh);
+                        quoteCV.put(Contract.Quote.COLUMN_DAY_LOW, dayLow);
+                        quoteCV.put(Contract.Quote.COLUMN_AVERAGE_PRICE, averagePrice);
+                        quoteCV.put(Contract.Quote.COLUMN_YEAR_HIGH, yearHigh);
+                        quoteCV.put(Contract.Quote.COLUMN_YEAR_LOW, yearLow);
+                        quoteCV.put(Contract.Quote.COLUMN_COMPANY_NAME, name);
 
-                       quoteCVs.add(quoteCV);
-                   }
-               }
+                        quoteCVs.add(quoteCV);
+                    }
+                }
             }
 
             context.getContentResolver()
@@ -144,12 +145,19 @@ public final class QuoteSyncJob {
                             Contract.Quote.URI,
                             quoteCVs.toArray(new ContentValues[quoteCVs.size()]));
 
-            Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED);
-            context.sendBroadcast(dataUpdatedIntent);
+            // Update the App Widget when data is written into the database
+            updateWidgets(context);
 
         } catch (IOException exception) {
             Timber.e(exception, "Error fetching stock quotes");
         }
+    }
+
+    private static void updateWidgets(Context context){
+        // Setting the package ensures that only components in this app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(context.getPackageName());
+        context.sendBroadcast(dataUpdatedIntent);
     }
 
     private static void schedulePeriodic(Context context) {
