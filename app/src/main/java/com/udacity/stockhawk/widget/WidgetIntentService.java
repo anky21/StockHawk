@@ -38,7 +38,7 @@ public class WidgetIntentService extends IntentService {
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
-                WidgetIntentService.class));
+                WidgetProvider.class));
 
         String symbol = "FB";
         Uri uri = Contract.Quote.makeUriForStock(symbol);
