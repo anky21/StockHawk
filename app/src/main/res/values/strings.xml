@@ -43,5 +43,6 @@
 
     <!-- Strings related to Widgets -->
     <string name="title_widget_static">Stock Hawk</string>
+    <string name="empty_stock_list">No Stock Information Available</string>
 
 </resources>

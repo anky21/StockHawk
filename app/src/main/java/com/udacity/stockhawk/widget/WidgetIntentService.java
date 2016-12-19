@@ -61,7 +61,7 @@ public class WidgetIntentService extends IntentService {
 
         // Perform this loop procedure for each widget
         for (int appWidgetId : appWidgetIds){
-            int layoutId = R.layout.widget_static;
+            int layoutId = R.layout.widget_detail_list_item;
             RemoteViews views = new RemoteViews(getPackageName(), layoutId);
 
             // Add the data to the RemoteViews
