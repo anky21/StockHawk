@@ -10,6 +10,10 @@ import android.widget.RemoteViewsService;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
  * Created by anky_ on 19/12/2016.
  */
@@ -54,7 +58,7 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                         QUOTE_COLUMNS,
                         null,
                         null,
-                        null);
+                        Contract.Quote.COLUMN_SYMBOL);
                 Binder.restoreCallingIdentity(identityToken);
             }
 
@@ -79,17 +83,29 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                 }
                 RemoteViews views = new RemoteViews(getPackageName(),
                         R.layout.widget_detail_list_item);
+                // Formats for numbers
+                DecimalFormat dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
+                DecimalFormat percentageFormat = (DecimalFormat) NumberFormat.getPercentInstance(Locale.getDefault());
+                percentageFormat.setMaximumFractionDigits(2);
+                percentageFormat.setMinimumFractionDigits(2);
+                percentageFormat.setPositivePrefix("+");
+
                 // Extract the data from the Cursor
                 String stockSymbol = data.getString(INDEX_SYMBOL);
-                String price = data.getString(INDEX_PRICE);
-                String change = data.getString(INDEX_PERCENTAGE_CHANGE);
-                String description = stockSymbol + " price is " + price;
+                float price = data.getFloat(INDEX_PRICE);
+                float change = data.getFloat(INDEX_PERCENTAGE_CHANGE);
+                if(change >0){
+                    views.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_green);
+                } else {
+                    views.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_red);
+                }
+                String description = stockSymbol + "The price of " + stockSymbol + " is " + price;
 
                 // Add the data to the RemoteViews
                 views.setTextViewText(R.id.symbol, stockSymbol);
                 views.setContentDescription(R.id.symbol, description);
-                views.setTextViewText(R.id.price, price);
-                views.setTextViewText(R.id.change, change);
+                views.setTextViewText(R.id.price, dollarFormat.format(price));
+                views.setTextViewText(R.id.change, percentageFormat.format(change / 100));
 
                 return views;
             }
