@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.udacity.stockhawk.R;
-import com.udacity.stockhawk.sync.QuoteSyncJob;
 import com.udacity.stockhawk.ui.MainActivity;
 
 /**
@@ -39,13 +38,15 @@ public class DetailWidgetProvider extends AppWidgetProvider {
 
             // Perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
+            super.onUpdate(context,appWidgetManager,appWidgetIds);
         }
+
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        if(QuoteSyncJob.ACTION_DATA_UPDATED.equals(intent.getAction())){
+        if(AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(intent.getAction())){
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
                     new ComponentName(context, getClass()));

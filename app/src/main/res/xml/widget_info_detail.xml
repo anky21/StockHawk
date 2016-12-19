@@ -9,6 +9,6 @@
     android:minWidth="@dimen/widget_detail_default_width"
     android:previewImage="@drawable/stocks_widget_preview"
     android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="0"
+    android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen|keyguard"
     tools:ignore="UnusedAttribute" />

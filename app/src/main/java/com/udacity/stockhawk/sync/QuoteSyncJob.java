@@ -145,20 +145,11 @@ public final class QuoteSyncJob {
                             Contract.Quote.URI,
                             quoteCVs.toArray(new ContentValues[quoteCVs.size()]));
 
-            // Update the App Widget when data is written into the database
-            updateWidgets(context);
-
         } catch (IOException exception) {
             Timber.e(exception, "Error fetching stock quotes");
         }
     }
 
-    private static void updateWidgets(Context context){
-        // Setting the package ensures that only components in this app will receive the broadcast
-        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
-                .setPackage(context.getPackageName());
-        context.sendBroadcast(dataUpdatedIntent);
-    }
 
     private static void schedulePeriodic(Context context) {
         Timber.d("Scheduling a periodic task");

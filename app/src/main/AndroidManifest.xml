@@ -50,7 +50,7 @@
             android:label="@string/title_widget_static">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="com.udacity.stockhawk.app.ACTION_DATA_UPDATED"/>
+
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/static_widget_info"/>
@@ -61,7 +61,7 @@
             android:label="@string/title_widget_static">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="com.udacity.stockhawk.app.ACTION_DATA_UPDATED"/>
+                <action android:name="com.udacity.stockhawk.app.ACTION_APPWIDGET_UPDATE"/>
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info_detail"/>

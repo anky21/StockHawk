@@ -1,5 +1,6 @@
 package com.udacity.stockhawk.ui;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -154,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             error.setVisibility(View.GONE);
         }
         adapter.setCursor(data);
+
+        updateWidgets();
     }
 
 
@@ -192,5 +195,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Updates the widgets when data changes
+    private void updateWidgets() {
+//        ComponentName name = new ComponentName(this, DetailWidgetProvider.class);
+//        int[] ids = AppWidgetManager.getInstance(this).getAppWidgetIds(name);
+//
+//        Intent dataUpdatedIntent = new Intent(this, DetailWidgetProvider.class);
+//        dataUpdatedIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//        dataUpdatedIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+//        sendBroadcast(dataUpdatedIntent);
+        Intent dataUpdatedIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+                .setPackage(this.getPackageName());
+        sendBroadcast(dataUpdatedIntent);
+
     }
 }
