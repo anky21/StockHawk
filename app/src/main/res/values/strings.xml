@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">Stock Hawk</string>
 
     <string name="pref_stocks_initialized_key" translatable="false">initialized</string>
@@ -44,5 +44,17 @@
     <!-- Strings related to Widgets -->
     <string name="title_widget_static">Stock Hawk</string>
     <string name="empty_stock_list">No Stock Information Available</string>
+
+    <!-- A11y -->
+    <string name="a11y_name">Company name: <xliff:g id="name">%1$s</xliff:g></string>
+    <string name="a11y_symbol">Stock symbol: <xliff:g id="symbol">%1$s</xliff:g></string>
+    <string name="a11y_price">Stock price: <xliff:g id="price">%1$s</xliff:g></string>
+    <string name="a11y_avg_price">50-day average price: <xliff:g id="avg_price">%1$s</xliff:g></string>
+    <string name="a11y_change">Stock price change: <xliff:g id="change">%1$s</xliff:g></string>
+    <string name="a11y_percent_change">Stock price percentage change: <xliff:g id="percentchange">%1$s</xliff:g></string>
+    <string name="a11y_chart">Stock price history chart</string>
+    <string name="a11y_day_change">Price change in one day: <xliff:g id="day_change">%1$s</xliff:g></string>
+    <string name="a11y_year_change">52 week price range: <xliff:g id="year_change">%1$s</xliff:g></string>
+    <string name="a11y_avg_volume">Average volume: <xliff:g id="avg_volume">%1$s</xliff:g></string>
 
 </resources>

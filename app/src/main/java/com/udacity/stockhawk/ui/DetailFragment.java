@@ -73,6 +73,14 @@ public class DetailFragment extends Fragment
     TextView mAvgPrice;
     @BindView(R.id.avg_volume_tv)
     TextView mAverageVolume;
+    @BindView(R.id.day_range_label_tv)
+    TextView mDayRangeLabel;
+    @BindView(R.id.year_range_label_tv)
+    TextView mYearRangeLabel;
+    @BindView(R.id.avg_price_label_TV)
+    TextView mAvgPriceLabel;
+    @BindView(R.id.avg_volume_label_tv)
+    TextView mAverageVolumeLabel;
 
     public DetailFragment() {
     }  // Required empty public constructor
@@ -134,6 +142,7 @@ public class DetailFragment extends Fragment
         applyChartSettings(chart); // Apply settings to the chart
 
         chart.setData(new LineData(xaxes, lineDataSets));
+        chart.setContentDescription(getString(R.string.a11y_chart));
         chart.invalidate();
     }
 
@@ -178,16 +187,30 @@ public class DetailFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
+            String companyName = data.getString(Quote.POSITION_NAME);
+            mCompanyName.setText(companyName);
+            mCompanyName.setContentDescription(getString(R.string.a11y_name, companyName));
 
-            mCompanyName.setText(data.getString(Quote.POSITION_NAME));
-            mPrice.setText(dollarFormat.format(data.getFloat(Quote.POSITION_PRICE)));
-            mAvgPrice.setText(dollarFormat.format(data.getFloat(Quote.POSITION_AVERAGE_PRICE)));
+            String price = dollarFormat.format(data.getFloat(Quote.POSITION_PRICE));
+            mPrice.setText(price);
+            mPrice.setContentDescription(getString(R.string.a11y_price, price));
+
+            String avgPrice = dollarFormat.format(data.getFloat(Quote.POSITION_AVERAGE_PRICE));
+            mAvgPrice.setText(avgPrice);
+            mAvgPrice.setContentDescription(getString(R.string.a11y_avg_price, avgPrice));
+            mAvgPriceLabel.setContentDescription(mAvgPrice.getContentDescription());
+
             float rawAbsoluteChange = data.getFloat(Contract.Quote.POSITION_ABSOLUTE_CHANGE);
 
-            mDollarChange.setText(dollarFormatWithPlus.format(rawAbsoluteChange));
-            mPercentageChange.setText(percentageFormat.format(data.getFloat(Quote.POSITION_PERCENTAGE_CHANGE) / 100));
+            String change = dollarFormatWithPlus.format(rawAbsoluteChange);
+            mDollarChange.setText(change);
+            mDollarChange.setContentDescription(getString(R.string.a11y_change,change));
 
-            if(rawAbsoluteChange > 0){
+            String percentageChange = percentageFormat.format(data.getFloat(Quote.POSITION_PERCENTAGE_CHANGE) / 100);
+            mPercentageChange.setText(percentageChange);
+            mPercentageChange.setContentDescription(getString(R.string.a11y_percent_change, percentageChange));
+
+            if (rawAbsoluteChange > 0) {
                 mPercentageChange.setBackgroundResource(R.drawable.percent_change_pill_green);
             } else {
                 mPercentageChange.setBackgroundResource(R.drawable.percent_change_pill_red);
@@ -200,6 +223,8 @@ public class DetailFragment extends Fragment
             String dayRange = String.format(getResources().getString(R.string.price_range),
                     utilities.formatNumbers(dayLow, 2), utilities.formatNumbers(dayHigh, 2));
             mDayRange.setText(dayRange);
+            mDayRange.setContentDescription(getString(R.string.a11y_day_change, dayRange));
+            mDayRangeLabel.setContentDescription(mDayRange.getContentDescription());
 
             // Yearly price range
             float yearHigh = data.getFloat(Quote.POSITION_YEAR_HIGH);
@@ -207,21 +232,25 @@ public class DetailFragment extends Fragment
             String yearRange = String.format(getResources().getString(R.string.price_range),
                     utilities.formatNumbers(yearLow, 2), utilities.formatNumbers(yearHigh, 2));
             mYearRange.setText(yearRange);
+            mYearRange.setContentDescription(getString(R.string.a11y_year_change, yearRange));
+            mYearRangeLabel.setContentDescription(mYearRange.getContentDescription());
 
             // Average Volume
             float volume = data.getFloat(Quote.POSITION_AVERAGE_VOLUME);
             float formattedVolume;
-            if(volume > 1000000){ // When volume is bigger than 1 million
-                formattedVolume = volume/1000000;
+            if (volume > 1000000) { // When volume is bigger than 1 million
+                formattedVolume = volume / 1000000;
                 volumeString = utilities.formatNumbers(formattedVolume, 2) + "m";
-            } else if(volume > 1000) { // When volume is bigger than 1 thousand
-                formattedVolume = volume/1000;
+            } else if (volume > 1000) { // When volume is bigger than 1 thousand
+                formattedVolume = volume / 1000;
                 volumeString = utilities.formatNumbers(formattedVolume, 2) + "k";
             } else { // When volume is lower than 1 thousand
                 formattedVolume = Math.round(volume);
                 volumeString = String.valueOf(formattedVolume);
             }
             mAverageVolume.setText(volumeString);
+            mAverageVolume.setContentDescription(getString(R.string.a11y_avg_volume, volumeString));
+            mAverageVolumeLabel.setContentDescription(mAverageVolume.getContentDescription());
 
             String historicalDataRaw = data.getString(Quote.POSITION_HISTORY);
             ArrayList<String> historyDate = new ArrayList<>(); // Array data of historical dates
@@ -230,7 +259,7 @@ public class DetailFragment extends Fragment
             ArrayList<Float> formattedHistoryPrice = new ArrayList<>(); // Array data of historical prices in a chronological order
             if (null != historicalDataRaw) {
                 String[] splitHistoricalData = historicalDataRaw.split("\\r?\\n"); // Split on new lines (.split("\\r\\n|\\n|\\r"))
-                Log.v(LOG_TAG,"abc" + splitHistoricalData[1]);
+                Log.v(LOG_TAG, "abc" + splitHistoricalData[1]);
                 for (int i = 0; i < splitHistoricalData.length; i++) {
                     int commaIndex = splitHistoricalData[i].indexOf(","); // Index of the comma
                     int endIndex = splitHistoricalData[i].length();
