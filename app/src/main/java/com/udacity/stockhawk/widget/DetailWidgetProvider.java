@@ -1,6 +1,7 @@
 package com.udacity.stockhawk.widget;
 
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.udacity.stockhawk.R;
+import com.udacity.stockhawk.ui.DetailActivity;
 import com.udacity.stockhawk.ui.MainActivity;
 
 /**
@@ -35,6 +37,13 @@ public class DetailWidgetProvider extends AppWidgetProvider {
              */
             views.setRemoteAdapter(R.id.widget_list, new Intent(context, DetailWidgetRemoteViewsService.class));;
             views.setEmptyView(R.id.widget_list, R.id.widget_empty);
+
+            // A click on the list item will open the DetailActivity
+            Intent clickIntentTemplate = new Intent(context, DetailActivity.class);
+            PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
+                    .addNextIntentWithParentStack(clickIntentTemplate)
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            views.setPendingIntentTemplate(R.id.widget_list, clickPendingIntentTemplate);
 
             // Perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views);

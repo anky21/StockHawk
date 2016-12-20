@@ -14,6 +14,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import static com.udacity.stockhawk.R.id.symbol;
+
 /**
  * Created by anky_ on 19/12/2016.
  */
@@ -102,10 +104,15 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                 String description = stockSymbol + "The price of " + stockSymbol + " is " + price;
 
                 // Add the data to the RemoteViews
-                views.setTextViewText(R.id.symbol, stockSymbol);
-                views.setContentDescription(R.id.symbol, description);
+                views.setTextViewText(symbol, stockSymbol);
+                views.setContentDescription(symbol, description);
                 views.setTextViewText(R.id.price, dollarFormat.format(price));
                 views.setTextViewText(R.id.change, percentageFormat.format(change / 100));
+
+                // Extra info accompanies the intent
+                Intent fillInIntent = new Intent();
+                fillInIntent.putExtra(Intent.EXTRA_TEXT, stockSymbol);
+                views.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
 
                 return views;
             }
