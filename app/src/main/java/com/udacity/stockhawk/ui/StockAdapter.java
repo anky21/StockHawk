@@ -35,11 +35,11 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
 
         dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
         dollarFormatWithPlus = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
-        dollarFormatWithPlus.setPositivePrefix("+$");
+        dollarFormatWithPlus.setPositivePrefix(context.getString(R.string.dollar_positive_prefix));
         percentageFormat = (DecimalFormat) NumberFormat.getPercentInstance(Locale.getDefault());
         percentageFormat.setMaximumFractionDigits(2);
         percentageFormat.setMinimumFractionDigits(2);
-        percentageFormat.setPositivePrefix("+");
+        percentageFormat.setPositivePrefix(context.getString(R.string.percentage_positive_prefix));
     }
 
     void setCursor(Cursor cursor) {

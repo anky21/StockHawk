@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,11 +107,11 @@ public class DetailFragment extends Fragment
         // Formats for share price, dollar change and percentage change
         dollarFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
         dollarFormatWithPlus = (DecimalFormat) NumberFormat.getCurrencyInstance(Locale.US);
-        dollarFormatWithPlus.setPositivePrefix("+$");
+        dollarFormatWithPlus.setPositivePrefix(getString(R.string.dollar_positive_prefix));
         percentageFormat = (DecimalFormat) NumberFormat.getPercentInstance(Locale.getDefault());
         percentageFormat.setMaximumFractionDigits(2);
         percentageFormat.setMinimumFractionDigits(2);
-        percentageFormat.setPositivePrefix("+");
+        percentageFormat.setPositivePrefix(getString(R.string.percentage_positive_prefix));
 
         return rootView;
     }
@@ -240,10 +239,10 @@ public class DetailFragment extends Fragment
             float formattedVolume;
             if (volume > 1000000) { // When volume is bigger than 1 million
                 formattedVolume = volume / 1000000;
-                volumeString = utilities.formatNumbers(formattedVolume, 2) + "m";
+                volumeString = utilities.formatNumbers(formattedVolume, 2) + getString(R.string.million_symbol);
             } else if (volume > 1000) { // When volume is bigger than 1 thousand
                 formattedVolume = volume / 1000;
-                volumeString = utilities.formatNumbers(formattedVolume, 2) + "k";
+                volumeString = utilities.formatNumbers(formattedVolume, 2) + getString(R.string.thousand_symbol);
             } else { // When volume is lower than 1 thousand
                 formattedVolume = Math.round(volume);
                 volumeString = String.valueOf(formattedVolume);
@@ -259,7 +258,6 @@ public class DetailFragment extends Fragment
             ArrayList<Float> formattedHistoryPrice = new ArrayList<>(); // Array data of historical prices in a chronological order
             if (null != historicalDataRaw) {
                 String[] splitHistoricalData = historicalDataRaw.split("\\r?\\n"); // Split on new lines (.split("\\r\\n|\\n|\\r"))
-                Log.v(LOG_TAG, "abc" + splitHistoricalData[1]);
                 for (int i = 0; i < splitHistoricalData.length; i++) {
                     int commaIndex = splitHistoricalData[i].indexOf(","); // Index of the comma
                     int endIndex = splitHistoricalData[i].length();

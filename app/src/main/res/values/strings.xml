@@ -3,43 +3,45 @@
 
     <string name="pref_stocks_initialized_key" translatable="false">initialized</string>
 
-    <string name="pref_stocks_key">stocks</string>
+    <string name="pref_stocks_key" translatable="false">stocks</string>
 
     <string name="chart_no_data">No data</string>
 
-
+    <!-- Preference Strings -->
     <string name="pref_display_mode_title">Display Mode</string>
-    <string name="pref_display_mode_key">displayMode</string>
-    <string name="pref_display_mode_default">@string/pref_display_mode_percentage_key</string>
+    <string name="pref_display_mode_key" translatable="false">displayMode</string>
+    <string name="pref_display_mode_default" translatable="false">@string/pref_display_mode_percentage_key</string>
 
-    <string name="pref_display_mode_absolute_key">absolute</string>
-    <string name="pref_display_mode_percentage_key">percentage</string>
+    <string name="pref_display_mode_absolute_key" translatable="false">absolute</string>
+    <string name="pref_display_mode_percentage_key" translatable="false">percentage</string>
 
-    <string name="default_stocks_yahoo">YHOO</string>
-    <string name="default_stocks_apple">AAPL</string>
-    <string name="default_stocks_microsoft">MSFT</string>
-    <string name="default_stocks_facebook">FB</string>
+    <!-- Default stock symbols -->
+    <string name="default_stocks_yahoo" translatable="false">YHOO</string>
+    <string name="default_stocks_apple" translatable="false">AAPL</string>
+    <string name="default_stocks_microsoft" translatable="false">MSFT</string>
+    <string name="default_stocks_facebook" translatable="false">FB</string>
 
+    <string name="action_change_units" translatable="false">@string/pref_display_mode_key</string>
 
-    <string name="action_change_units">@string/pref_display_mode_key</string>
-
-
+    <!-- Dialogue Strings -->
     <string name="dialog_title">Add Stock</string>
     <string name="dialog_hint">Symbol (e.g. GOOG)</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_add">Add</string>
 
+    <!-- Error messages -->
     <string name="error_stock_not_found">Symbol %s is invalid!</string>
     <string name="error_no_network">No network connectivity! Will load stock cursor when the network is available.</string>
     <string name="error_no_stocks">No stocks added! Hit the floating action button to add one.</string>
 
+    <!-- Toast messages -->
     <string name="toast_stock_added_no_connectivity">Symbol %s added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>
     <string name="non_existent_stock_message"> - this stock does not exist. Please check.</string>
     <string name="nonexistent_or_suspended_stock_msg"> - this stock does not exist or is suspended.</string>
 
     <!-- DetailActivity Strings -->
-    <string name="price_range">%1$s - %2$s</string>
+    <string name="price_range" translatable="false">%1$s - %2$s</string>
 
     <!-- Strings related to Widgets -->
     <string name="title_widget_static">Stock Hawk</string>
@@ -56,5 +58,8 @@
     <string name="a11y_day_change">Price change in one day: <xliff:g id="day_change">%1$s</xliff:g></string>
     <string name="a11y_year_change">52 week price range: <xliff:g id="year_change">%1$s</xliff:g></string>
     <string name="a11y_avg_volume">Average volume: <xliff:g id="avg_volume">%1$s</xliff:g></string>
-
+    <string name="dollar_positive_prefix">+$</string>
+    <string name="percentage_positive_prefix" translatable="false">+</string>
+    <string name="million_symbol">m</string>
+    <string name="thousand_symbol">k</string>
 </resources>
