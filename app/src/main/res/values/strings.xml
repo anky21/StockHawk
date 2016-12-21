@@ -58,8 +58,16 @@
     <string name="a11y_day_change">Price change in one day: <xliff:g id="day_change">%1$s</xliff:g></string>
     <string name="a11y_year_change">52 week price range: <xliff:g id="year_change">%1$s</xliff:g></string>
     <string name="a11y_avg_volume">Average volume: <xliff:g id="avg_volume">%1$s</xliff:g></string>
+
+    <!-- number format -->
     <string name="dollar_positive_prefix">+$</string>
     <string name="percentage_positive_prefix" translatable="false">+</string>
     <string name="million_symbol">m</string>
     <string name="thousand_symbol">k</string>
+
+    <!-- Detail activity labels -->
+    <string name="price_day_range">Day Range</string>
+    <string name="price_year_range">52-Week Range</string>
+    <string name="avg_price">50-Day Avg. Price</string>
+    <string name="avg_volume">Avg. Volume</string>
 </resources>

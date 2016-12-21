@@ -11,7 +11,7 @@
     <TextView
         android:id="@+id/day_range_label_tv"
         style="@style/DetailGridLayoutTextStyle"
-        android:text="Day Range"
+        android:text="@string/price_day_range"
         app:layout_columnWeight="1"
         app:layout_gravity="fill"
         app:layout_rowWeight="1"/>
@@ -26,7 +26,7 @@
     <TextView
         android:id="@+id/year_range_label_tv"
         style="@style/DetailGridLayoutTextStyle"
-        android:text="52-Week Range"
+        android:text="@string/price_year_range"
         app:layout_columnWeight="1"
         app:layout_gravity="fill"
         app:layout_rowWeight="1"/>
@@ -39,7 +39,7 @@
 
     <TextView
         android:id="@+id/avg_price_label_TV"
-        android:text="50-Day Avg. Price"
+        android:text="@string/avg_price"
         style="@style/DetailGridLayoutTextStyle"
         app:layout_gravity="fill"
         app:layout_columnWeight="1"
@@ -53,7 +53,7 @@
 
     <TextView
         android:id="@+id/avg_volume_label_tv"
-        android:text="Avg. Volume"
+        android:text="@string/avg_volume"
         style="@style/DetailGridLayoutTextStyle"
         app:layout_gravity="fill"
         app:layout_columnWeight="1"
