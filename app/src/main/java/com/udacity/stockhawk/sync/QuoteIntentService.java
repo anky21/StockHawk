@@ -15,6 +15,11 @@ public class QuoteIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Timber.d("Intent handled");
-        QuoteSyncJob.getQuotes(getApplicationContext());
+        if (intent.hasExtra(Intent.EXTRA_TEXT)) {
+            String stockSymbol = intent.getStringExtra(Intent.EXTRA_TEXT);
+            QuoteSyncJob.getQuotesForNewStock(getApplicationContext(), stockSymbol);
+        } else {
+            QuoteSyncJob.getQuotes(getApplicationContext());
+        }
     }
 }

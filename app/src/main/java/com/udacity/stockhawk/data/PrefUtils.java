@@ -3,7 +3,6 @@ package com.udacity.stockhawk.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 import com.udacity.stockhawk.R;
 
@@ -34,35 +33,6 @@ public final class PrefUtils {
             return defaultStocks;
         }
         return prefs.getStringSet(stocksKey, new HashSet<String>());
-    }
-
-    public static void editStockPref(Context context, String symbol, Boolean add) {
-        String key = context.getString(R.string.pref_stocks_key);
-        Set<String> stocks = getStocks(context);
-
-        if (add) {
-            if (stocks.contains(symbol.toUpperCase())) {
-                Toast.makeText(context, R.string.duplicate_stocks_msg, Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                stocks.add(symbol);
-            }
-        } else {
-            stocks.remove(symbol);
-        }
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putStringSet(key, stocks);
-        editor.apply();
-    }
-
-    public static void addStock(Context context, String symbol) {
-        editStockPref(context, symbol, true);
-    }
-
-    public static void removeStock(Context context, String symbol) {
-        editStockPref(context, symbol, false);
     }
 
     public static String getDisplayMode(Context context) {

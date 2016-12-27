@@ -9,9 +9,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
+import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.utilities;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,7 +64,7 @@ public final class QuoteSyncJob {
                     Contract.Quote.COLUMN_SYMBOL + " ASC"
             );
 
-            if (cursor.getCount()>0) {
+            if (cursor.getCount() > 0) {
                 mStockArrayDb = new ArrayList<String>();
                 while (cursor.moveToNext()) {
                     String stockSymbol = cursor.getString(cursor.getColumnIndexOrThrow(Contract.Quote.COLUMN_SYMBOL));
@@ -153,10 +156,80 @@ public final class QuoteSyncJob {
         }
     }
 
+    static void getQuotesForNewStock(final Context context, final String stockSymbol) {
+
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
+        from.add(Calendar.YEAR, -YEARS_OF_HISTORY);
+
+        try {
+            Stock stock = YahooFinance.get(stockSymbol);
+            StockQuote quote = stock.getQuote();
+            if (null == stock || (null == quote.getPrice() && null == quote.getPreviousClose())) {
+                utilities.showToast(context, stockSymbol, R.string.nonexistent_or_suspended_stock_msg);
+            } else {
+                float price = quote.getPrice().floatValue();
+                float change = quote.getChange().floatValue();
+                float percentChange = quote.getChangeInPercent().floatValue();
+                Long averageVolume = quote.getAvgVolume().longValue();
+
+                String dayHigh;
+                if (null != quote.getDayHigh()) {
+                    dayHigh = quote.getDayHigh().toString();
+                } else {
+                    dayHigh = " ";
+                }
+
+                String dayLow;
+                if (null != quote.getDayLow()) {
+                    dayLow = quote.getDayLow().toString();
+                } else {
+                    dayLow = " ";
+                }
+
+                float averagePrice = quote.getPriceAvg50().floatValue();
+                float yearHigh = quote.getYearHigh().floatValue();
+                float yearLow = quote.getYearLow().floatValue();
+                String name = stock.getName();
+
+                List<HistoricalQuote> history = stock.getHistory(from, to, Interval.DAILY);
+
+                StringBuilder historyBuilder = new StringBuilder();
+
+                for (HistoricalQuote it : history) {
+                    historyBuilder.append(it.getDate().getTimeInMillis());
+                    historyBuilder.append(", ");
+                    historyBuilder.append(it.getClose());
+                    historyBuilder.append("\n");
+                }
+
+                ContentValues quoteCV = new ContentValues();
+                quoteCV.put(Contract.Quote.COLUMN_SYMBOL, stockSymbol);
+                quoteCV.put(Contract.Quote.COLUMN_PRICE, price);
+                quoteCV.put(Contract.Quote.COLUMN_PERCENTAGE_CHANGE, percentChange);
+                quoteCV.put(Contract.Quote.COLUMN_ABSOLUTE_CHANGE, change);
+                quoteCV.put(Contract.Quote.COLUMN_HISTORY, historyBuilder.toString());
+                quoteCV.put(Contract.Quote.COLUMN_AVERAGE_VOLUME, averageVolume);
+                quoteCV.put(Contract.Quote.COLUMN_DAY_HIGH, dayHigh);
+                quoteCV.put(Contract.Quote.COLUMN_DAY_LOW, dayLow);
+                quoteCV.put(Contract.Quote.COLUMN_AVERAGE_PRICE, averagePrice);
+                quoteCV.put(Contract.Quote.COLUMN_YEAR_HIGH, yearHigh);
+                quoteCV.put(Contract.Quote.COLUMN_YEAR_LOW, yearLow);
+                quoteCV.put(Contract.Quote.COLUMN_COMPANY_NAME, name);
+
+                context.getContentResolver().insert(Contract.Quote.URI, quoteCV);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.v("TAG", "IOException yahoo");
+        }
+    }
+
     private static void schedulePeriodic(Context context) {
         Timber.d("Scheduling a periodic task");
 
         JobInfo.Builder builder = new JobInfo.Builder(PERIODIC_ID, new ComponentName(context, QuoteJobService.class));
+
 
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setPeriodic(PERIOD)
@@ -181,6 +254,29 @@ public final class QuoteSyncJob {
             Intent nowIntent = new Intent(context, QuoteIntentService.class);
             context.startService(nowIntent);
         } else {
+
+            JobInfo.Builder builder = new JobInfo.Builder(ONE_OFF_ID, new ComponentName(context, QuoteJobService.class));
+
+            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                    .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL);
+
+            JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+
+            scheduler.schedule(builder.build());
+        }
+    }
+
+    synchronized public static void addNewStock(Context context, String symbol) {
+
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
+            Intent nowIntent = new Intent(context, QuoteIntentService.class);
+            nowIntent.putExtra(Intent.EXTRA_TEXT, symbol);
+            context.startService(nowIntent);
+        } else {
+
             JobInfo.Builder builder = new JobInfo.Builder(ONE_OFF_ID, new ComponentName(context, QuoteJobService.class));
 
             builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
