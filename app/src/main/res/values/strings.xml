@@ -39,6 +39,7 @@
     <string name="toast_no_connectivity">Will refresh when network available.</string>
     <string name="non_existent_stock_message"> - this stock does not exist. Please check.</string>
     <string name="nonexistent_or_suspended_stock_msg"> - this stock does not exist or is suspended.</string>
+    <string name="duplicate_stocks_msg">You have already added this stock.</string>
 
     <!-- DetailActivity Strings -->
     <string name="price_range" translatable="false">%1$s - %2$s</string>

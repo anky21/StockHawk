@@ -96,6 +96,9 @@ public class DetailFragment extends Fragment
             symbol = intent.getStringExtra(Intent.EXTRA_TEXT);
         }
 
+        //Change the title of the DetailActivity
+        getActivity().setTitle(symbol.toUpperCase());
+
         // Build the URI for this stock with its symbol
         mUri = makeUriForStock(symbol);
 
@@ -203,7 +206,7 @@ public class DetailFragment extends Fragment
 
             String change = dollarFormatWithPlus.format(rawAbsoluteChange);
             mDollarChange.setText(change);
-            mDollarChange.setContentDescription(getString(R.string.a11y_change,change));
+            mDollarChange.setContentDescription(getString(R.string.a11y_change, change));
 
             String percentageChange = percentageFormat.format(data.getFloat(Quote.POSITION_PERCENTAGE_CHANGE) / 100);
             mPercentageChange.setText(percentageChange);

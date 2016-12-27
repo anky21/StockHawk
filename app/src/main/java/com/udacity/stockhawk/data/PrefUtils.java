@@ -24,7 +24,6 @@ public final class PrefUtils {
         HashSet<String> defaultStocks = new HashSet<>(Arrays.asList(defaultStocksList));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-
         boolean initialized = prefs.getBoolean(initializedKey, false);
 
         if (!initialized) {
@@ -35,7 +34,6 @@ public final class PrefUtils {
             return defaultStocks;
         }
         return prefs.getStringSet(stocksKey, new HashSet<String>());
-
     }
 
     public static void editStockPref(Context context, String symbol, Boolean add) {
@@ -44,7 +42,7 @@ public final class PrefUtils {
 
         if (add) {
             if (stocks.contains(symbol.toUpperCase())) {
-                Toast.makeText(context, "You have already added this stock.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.duplicate_stocks_msg, Toast.LENGTH_SHORT).show();
                 return;
             } else {
                 stocks.add(symbol);
